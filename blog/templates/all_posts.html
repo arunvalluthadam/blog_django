@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<div id="posted">
+	{% for entry in entries %}
+    	<p>
+	    	<div id="sephed"><h4><a href="/blogs/get/{{ entry.id }}">{{ entry.title }}</a></h4></div>
+	      	<div id="separa"><h5>{{ entry.body|lower|truncatewords:"10" }}</h5></div><br><br>
+    	</p>
+	{% endfor %}
+</div>
+{% endblock %}

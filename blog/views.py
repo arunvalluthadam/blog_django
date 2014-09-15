@@ -1,0 +1,99 @@
+from django.shortcuts import render_to_response
+from blog.models import Blog
+from django.http import HttpResponseRedirect
+from django.contrib import auth
+from django.contrib.auth.decorators import login_required
+from django.core.context_processors import csrf
+from django_projects.forms import MyRegistrationForm
+from forms import BlogpostForm
+
+# Create your views here.
+
+# create posts
+@login_required(login_url="/blogs/accounts/login")
+def create(request):
+    if request.POST:
+        form = BlogpostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/blogs/all/')
+    else:
+        form = BlogpostForm()
+    args = {}
+    args.update(csrf(request))
+    args['form'] = form
+    return render_to_response('add.html', args)
+
+
+# view posts
+def all_post(request):
+    return render_to_response('all_posts.html', {'entries': Blog.objects.all()})
+
+@login_required(login_url="/blogs/accounts/login")
+def one_post(request, blog_id=1):
+    return render_to_response('one_post.html', {'entry': Blog.objects.get(id=blog_id)})
+
+# delete posts
+@login_required(login_url="/blogs/accounts/login")
+def del_post(request, blog_id=0):
+    r = Blog.objects.get(id=blog_id)
+    return render_to_response('delete_post.html', r.delete())
+
+# login and logout user
+def login(request):
+    c = {}
+    c.update(csrf(request))
+    return render_to_response('login.html', c)
+
+def auth_view(request):
+    username = request.POST.get('username', '')
+    password = request.POST.get('password', '')
+    user = auth.authenticate(username=username, password=password)
+    
+    if user is not None:
+        auth.login(request, user)
+        return HttpResponseRedirect('/blogs/accounts/loggedin')
+    else:
+        return HttpResponseRedirect('/blogs/accounts/invalid')
+    
+def loggedin(request):
+    return render_to_response('logged_in.html')
+
+def invalid_login(request):
+    return render_to_response('invalid_login.html')
+
+def logout(request):
+    auth.logout(request)
+    return render_to_response('logout.html')
+
+# register user
+def register_user(request):
+    if request.method == 'POST':
+        form = MyRegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/blogs/accounts/register_success')
+    
+    args = {}
+    args.update(csrf(request))
+    
+    args['form'] = MyRegistrationForm()
+    
+    return render_to_response('register.html', args)
+        
+def register_success(request):
+    return render_to_response('register_success.html')
+
+# search by title
+def search_titles(request):
+    if request.method == "POST":
+        search_text = request.POST['search_text']
+    else:
+        search_text = ''
+    articles = Blog.objects.filter(title__contains=search_text)
+    return render_to_response('ajax_search.html', {'articles': articles})
+
+# about
+@login_required(login_url="/blogs/accounts/login")
+def about(request):
+    return render_to_response('about.html')

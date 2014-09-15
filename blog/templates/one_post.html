@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block sidebar %}
+
+	<li><a href="/blogs/accounts/logout/"><h4>Logout</h4></a></li>
+	<li class="divider-vertical"></li>
+	
+{% endblock %}
+
+{% block body %}
+	<div id="posted">
+        <div id="sephed"><h4>{{ entry.title }}</h4></div> <br>
+        <div id="separa"><h5>{{ entry.body }}</h5></div>
+		<div class="btn"><a href="/blogs/delete/{{entry.id}}">Delete</a></div>
+	</div>
+{% endblock %}

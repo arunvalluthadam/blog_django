@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block sidebar %}
+
+	<li><a href="/blogs/accounts/logout/"><h4>Logout</h4></a></li>
+	<li class="divider-vertical"></li>
+	
+{% endblock %}
+
+{% block body %}
+<div id="blogtext">
+	<div id="introtext"><h1>Blog Writing</h1></div>
+		<form action="/blogs/create/" method="post">{% csrf_token %}
+			<ul>
+				{{form.as_ul}}<br>
+			</ul>
+			<input type="submit" name="submit" value="Create Post">
+		</form>
+		<!--<a href="/blogs/accounts/logout/" class="btn btn-primary">Logout</a>-->
+		<br><br><h2>You needs to login First</h2>
+		<br><br><br><br><br><br><br><br><br><br><br><br><br>	
+</div>
+
+{% endblock %}
+
+<!--<form action='add_entry' method="post">{% csrf_token %}
+			<p><input name="name" type="text" placeholder="Title of the Post" style="width: 640px; color: #0B4008; font-size: 20px;"></p>
+			<br>
+			<p><textarea rows="20" cols="50" name="place" type="text" placeholder="Paragraph You need to Write" style="color: #0B4008; width: 640px; font-size: 15px;"></textarea></p>
+	   		<input id="subbtn" class="btn btn-inverse" type="submit" value="Enter Post">
+		</form>-->

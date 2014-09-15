@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block body %}
+    <div id="logpad">
+        <center><h2>Login</h2></center>
+        {% if form.errors %}
+            <p class=error>Sorry Invalid username or password
+        {% endif %}
+        <center>
+            <form action="/blogs/accounts/auth/" method="post">{% csrf_token %}
+                <dl>
+                    <dd><input class="span3" id="logbtn" value="" type="text" name="username" placeholder="Username" style="color: #0B4008; font-size: 20px;">
+                    <dd><input class="span3" id="logbtn" value="" type="password" name="password" placeholder="Password" style="color: #0B4008; font-size: 20px;">
+                    <dd><input class="btn btn-primary" id="logbtn" class="myButton" type="submit" value="Login">
+                </dl>
+            </form>
+            <br>
+        </center>
+    </div>
+    
+{% endblock %}
